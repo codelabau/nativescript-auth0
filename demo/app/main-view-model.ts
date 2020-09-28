@@ -17,6 +17,19 @@ export class HelloWorldModel extends Observable {
         this.auth0.webAuthentication({
             scope: 'openid offline_access'
         }).then((result) => {
+            console.log('success');
+            console.log(result);
+            console.log(result.accessToken);
+            console.log(result.getAccessToken());
+            console.log(result.toJSON());
+            this.message = JSON.stringify(result);
+            console.log(JSON.stringify(result));
+        }).catch((e: Error) => console.log(e, e.stack));
+    }
+
+    onLogoutTap(args) {
+        const button = args.object;
+        this.auth0.logout().then((result) => {
             this.message = JSON.stringify(result);
             console.log(result);
         }).catch((e: Error) => console.log(e, e.stack));

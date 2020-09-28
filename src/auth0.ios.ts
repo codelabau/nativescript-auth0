@@ -141,4 +141,24 @@ export class Auth0 extends Auth0Common {
             }
         });
     }
+
+    // public logout(): Promise<any> {
+    //     return new Promise((resolve, reject) => {
+    //         try {
+    //             resolve(true);
+    //             /*
+    //             this.authenticationApi
+    //                 .logout((result) => {
+    //                     if (result.failure != null) {
+    //                         reject(result.failure);
+    //                     } else {
+    //                         resolve(result.success);
+    //                     }
+    //                 });
+    //             */
+    //         } catch (e) {
+    //             reject(e);
+    //         }
+    //     });
+    // }
 }

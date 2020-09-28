@@ -8,6 +8,7 @@ export declare class AuthorizeResult {
     constructor(requestCode: number, resultCode: number, intent?: Intent);
     constructor(intent?: Intent);
     isValid(expectedRequestCode: number): boolean;
+    isCanceled(): boolean;
     getIntent(): Intent;
     getRequestCode(): number;
     getResultCode(): number;

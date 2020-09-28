@@ -3,5 +3,6 @@
   <StackLayout class="p-20">
     <Button text="Login" tap="{{ onTap }}"></Button>
     <Label text="{{ message }}" class="t-20 text-center c-black" textWrap="true"/>
+    <Button text="Logout" tap="{{ onLogoutTap }}"></Button>
   </StackLayout>
 </Page>

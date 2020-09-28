@@ -13,6 +13,8 @@ dependencies {
         androidXLegacyVersion = androidXLegacy
     }
 
+    implementation 'com.auth0.android:auth0:1.26.1'
+
     implementation "androidx.legacy:legacy-support-v4:$androidXLegacyVersion"
     implementation "androidx.browser:browser:1.2.0"
     implementation "com.auth0.android:jwtdecode:2.0.0"

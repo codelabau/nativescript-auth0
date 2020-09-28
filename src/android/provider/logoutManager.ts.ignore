@@ -1,0 +1,76 @@
+import Context = android.content.Context;
+import Uri = android.net.Uri;
+import Log = android.util.Log;
+
+import { Auth0 } from '../auth0';
+import { Auth0Exception } from '../auth0Exception';
+import { AuthorizeResult } from './authorizeResult';
+import { VoidCallback } from './voidCallback';
+import { CustomTabsOptions } from './customTabsOptions';
+import { authenticateUsingBrowser } from './authenticationActivity';
+
+export class LogoutManager {
+    private static readonly TAG: string = 'LogoutManager';
+
+    private static readonly KEY_CLIENT_ID: string = "client_id";
+    private static readonly KEY_TELEMETRY: string = "auth0Client";
+    private static readonly KEY_RETURN_TO_URL: string = "returnTo";
+
+    private readonly account: Auth0;
+    private readonly callback: VoidCallback;
+    private readonly parameters: { [key: string]: string };
+
+    private ctOptions: CustomTabsOptions;
+
+    constructor(account: Auth0, callback: VoidCallback, returnToUrl: string, ctOptions: CustomTabsOptions | undefined) {
+        this.account = account;
+        this.callback = callback;
+        this.parameters = { [LogoutManager.KEY_RETURN_TO_URL]: returnToUrl };
+        this.ctOptions = ctOptions;
+    }
+
+    static startLogout(context: Context): void {
+        this.addClientParameters(this.parameters);
+        const uri = this.buildLogoutUri();
+
+        authenticateUsingBrowser(context, uri, this.ctOptions);
+    }
+
+    static resume(result: AuthorizeResult): boolean {
+        if (result.isCancelled()) {
+            const exception: Auth0Exception = new Auth0Exception("The user closed the browser app so the logout was cancelled.");
+            this.callback.onFailure(exception);
+        } else {
+            this.callback.onSuccess(null);
+        }
+        return true;
+    }
+
+    public resumeAuthorization(data: AuthorizeResult): boolean {
+        return true;
+    }
+
+    static buildLogoutUri(): Uri {
+        const logoutUri: Uri = Uri.parse(this.account.getAuthorizeUrl());
+        const builder: Uri.Builder = logoutUri.buildUpon();
+        for (const key in this.parameters) {
+            builder.appendQueryParameter(key, this.parameters[key]);
+        }
+        const uri: Uri = builder.build();
+        this.logDebug(`Using the following Logout URI: ${uri.toString()}`);
+        return uri;
+    }
+
+    private addClientParameters(parameters: { [key: string]: string }) {
+        if (this.account.getTelemetry() != null) {
+            parameters[LogoutManager.KEY_TELEMETRY] = this.account.getTelemetry().getValue();
+        }
+        parameters[LogoutManager.KEY_CLIENT_ID] = this.account.getClientId();
+    }
+
+    private static logDebug(message: string): void {
+        if (this.account.isLoggingEnabled()) {
+            Log.d(LogoutManager.TAG, message);
+        }
+    }
+}

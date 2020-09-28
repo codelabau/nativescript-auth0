@@ -14,8 +14,10 @@ import { Auth0 } from '../auth0';
 import { PKCE } from './pkce';
 import { CustomTabsOptions } from './customTabsOptions';
 import { AuthCallback } from './authCallback';
+import { VoidCallback } from './voidCallback';
 import { AuthenticationException } from '../authentication/authenticationException';
 import { AuthorizeResult } from './authorizeResult';
+// import { LogoutManager } from './logoutManager';
 
 
 /**
@@ -236,6 +238,26 @@ export class WebAuthProvider {
         const redirectUri = CallbackHelper.getCallbackUri(this.scheme, activity.getApplicationContext().getPackageName(), this.account.getDomainUrl());
         manager.startAuthorization(activity, redirectUri, 110);
     }
+
+    // public logout(context: Context, callback: VoidCallback): void {
+    //     WebAuthProvider.managerInstance = null;
+
+    //     if (!WebAuthProvider.hasBrowserAppInstalled(context.getPackageManager())) {
+    //         const ex = new AuthenticationException({
+    //             code: "a0.browser_not_available",
+    //             description: "No Browser application installed to perform web authentication."
+    //         }, 0);
+    //         callback.onFailure(ex);
+    //         return;
+    //     }
+
+    //     const redirectUri = CallbackHelper.getCallbackUri(this.scheme, context.getApplicationContext().getPackageName(), this.account.getDomainUrl());
+    //     const logoutManager: LogoutManager = new LogoutManager(this.account, callback, redirectUri, this.ctOptions);
+
+    //     WebAuthProvider.managerInstance = logoutManager;
+
+    //     LogoutManager.startLogout(context);
+    // }
 
     // Public methods
 

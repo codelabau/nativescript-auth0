@@ -63,6 +63,15 @@ export class AuthorizeResult {
         return fromRequest && this.resultCode === Activity.RESULT_OK;
     }
 
+    /**
+     * Checks whether the result belongs to a canceled authentication
+     *
+     * @return true if the result is from a canceled authentication. False otherwise.
+     */
+    public isCanceled(): boolean {
+        return this.resultCode === Activity.RESULT_CANCELED && this.intent != null && this.intent.getData() == null;
+    }
+
     public getIntent(): Intent {
         return this.intent;
     }
