@@ -29,7 +29,8 @@
             "~/*": [
                 "app/*"
             ]
-        }
+        },
+        "skipLibCheck": true
     },
     "include": [
         "../src",

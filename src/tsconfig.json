@@ -22,7 +22,8 @@
         "plugins": [{
             "transform": "@nativescript/webpack/transformers/ns-transform-native-classes",
             "type": "raw"
-        }]
+        }],
+        "skipLibCheck": true
     },
     "exclude": [
         "node_modules"

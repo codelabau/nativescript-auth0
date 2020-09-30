@@ -11,7 +11,6 @@ export class Credentials {
     public readonly tokenType: string | undefined;
     /// The token lifetime in seconds
     public readonly expiresIn: number | undefined;
-    /// The token expiration date
     public readonly expiresAt: Date | undefined;
     /// If the API allows you to request new access tokens and the scope `offline_access` was included on Auth
     public readonly refreshToken: string | undefined;

@@ -7,25 +7,25 @@ import {
 } from './auth0-common';
 // import { AuthenticationAPIClient } from './android/authentication/authenticationAPIClient';
 // import { WebAuthProvider } from './android/provider/webAuthProvider';
-import { AuthenticationException } from './android/authentication/authenticationException';
+// import { AuthenticationException } from './android/authentication/authenticationException';
 // import { Auth0 as Auth0Android } from './android/auth0';
-import { Credentials } from './common/credentials';
-import { UserInfo } from './common/userInfo';
+// import { Credentials } from './common/credentials';
+// import { UserInfo } from './common/userInfo';
 
 // @ts-ignore
-const WebAuthProvider = com.auth0.android.provider.WebAuthProvider;
+// const WebAuthProvider = com.auth0.android.provider.WebAuthProvider;
 // @ts-ignore
 const AuthCallback = com.auth0.android.provider.AuthCallback;
 // @ts-ignore
-const Auth0Android = com.auth0.android.Auth0;
+// const Auth0Android = com.auth0.android.Auth0;
 // @ts-ignore
-const AuthenticationAPIClient = com.auth0.android.authentication.AuthenticationAPIClient;
+// const AuthenticationAPIClient = com.auth0.android.authentication.AuthenticationAPIClient;
 // @ts-ignore
 // const Credentials = com.auth0.android.result.Credentials;
 
 export {
-    Credentials,
-    UserInfo,
+    // Credentials,
+    // UserInfo,
     ResponseType,
     WebAuthException,
     WebAuthOptions
@@ -33,20 +33,19 @@ export {
 
 export class Auth0 extends Auth0Common {
 
-    private account: typeof Auth0Android;
-    private authenticationApi: typeof AuthenticationAPIClient;
+    private account: com.auth0.android.Auth0;
+    // private authenticationApi: com.auth0.android.authentication.AuthenticationAPIClient;
 
     constructor(clientId: string, domain: string) {
         super(clientId, domain);
 
-        this.account = new Auth0Android(clientId, domain);
+        this.account = new com.auth0.android.Auth0(clientId, domain);
 
-        // this.authenticationApi = new AuthenticationAPIClient(this.account);
+        // this.authenticationApi = new com.auth0.android.authentication.AuthenticationAPIClient(this.account);
     }
 
-    public webAuthentication(options: WebAuthOptions): Promise<Credentials> {
-        // @ts-ignore
-        const webAuth = WebAuthProvider.login(this.account);
+    public webAuthentication(options: WebAuthOptions): Promise<any> {
+        const webAuth = com.auth0.android.provider.WebAuthProvider.login(this.account);
 
         if (options.audience != null) {
             webAuth.withAudience(options.audience);
@@ -70,6 +69,7 @@ export class Auth0 extends Auth0Common {
             webAuth.withState(options.state);
         }
         if (options.parameters != null) {
+            // @ts-ignore
             webAuth.withParameters(options.parameters);
         }
 
@@ -77,15 +77,23 @@ export class Auth0 extends Auth0Common {
             try {
                 const activity = Application.android.foregroundActivity == null ? Application.android.startActivity : Application.android.foregroundActivity;
                 webAuth.start(activity, new AuthCallback({
-                    onFailure: (dialogOrException: android.app.Dialog | AuthenticationException) => {
+                    onFailure: (dialogOrException: android.app.Dialog | com.auth0.android.authentication.AuthenticationException) => {
                         if (dialogOrException instanceof android.app.Dialog) {
                             reject(new WebAuthException(dialogOrException.toString()));
                         } else {
                             reject(new WebAuthException(dialogOrException.getDescription()));
                         }
                     },
-                    onSuccess: (credentials: Credentials) => {
-                        resolve(credentials);
+                    onSuccess: (credentials: com.auth0.android.result.Credentials) => {
+                        resolve({
+                            scope: credentials.getScope(),
+					        expires_at: credentials.getExpiresAt(),
+                            expires_in: credentials.getExpiresIn(),
+                            refresh_token: credentials.getRefreshToken(),
+                            access_token: credentials.getAccessToken(),
+                            id_token: credentials.getIdToken(),
+                            type: credentials.getType(),
+                        });
                     }
                 }));
             } catch (e) {
@@ -94,16 +102,37 @@ export class Auth0 extends Auth0Common {
         });
     }
 
-    public renewCredentials(refreshToken: string): Promise<Credentials> {
+    public logout(): Promise<any> {
+        const webAuth = com.auth0.android.provider.WebAuthProvider.logout(this.account);
+
+        return new Promise((resolve, reject) => {
+            try {
+                const activity = Application.android.foregroundActivity == null ? Application.android.startActivity : Application.android.foregroundActivity;
+                webAuth.start(activity, new com.auth0.android.provider.VoidCallback({
+                    onFailure: (err: com.auth0.android.authentication.AuthenticationException) => {
+                        reject(err);
+                    },
+                    onSuccess: () => {
+                        resolve(true);
+                    }
+                }));
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+
+    /*
+    public renewCredentials(refreshToken: string): Promise<com.auth0.android.result.Credentials> {
         return new Promise((resolve, reject) => {
             try {
                 this.authenticationApi
                     .renewAuth(refreshToken)
                     .start({
-                        onFailure: (error: AuthenticationException) => {
+                        onFailure: (error: com.auth0.android.authentication.AuthenticationException) => {
                             reject(error);
                         },
-                        onSuccess: (credentials: Credentials) => {
+                        onSuccess: (credentials: com.auth0.android.result.Credentials) => {
                             resolve(credentials);
                         }
                     });
@@ -119,7 +148,7 @@ export class Auth0 extends Auth0Common {
                 this.authenticationApi
                     .revokeToken(refreshToken)
                     .start({
-                        onFailure: (error: AuthenticationException) => {
+                        onFailure: (error: com.auth0.android.authentication.AuthenticationException) => {
                             reject(error);
                         },
                         onSuccess: () => {
@@ -132,16 +161,16 @@ export class Auth0 extends Auth0Common {
         });
     }
 
-    public getUserInfo(accessToken: string): Promise<UserInfo> {
+    public getUserInfo(accessToken: string): Promise<com.auth0.android.result.UserProfile> {
         return new Promise((resolve, reject) => {
             try {
                 this.authenticationApi
                     .userInfo(accessToken)
                     .start({
-                        onFailure: (error: AuthenticationException) => {
+                        onFailure: (error: com.auth0.android.authentication.AuthenticationException) => {
                             reject(error);
                         },
-                        onSuccess: (userInfo: UserInfo) => {
+                        onSuccess: (userInfo: com.auth0.android.result.UserProfile) => {
                             resolve(userInfo);
                         }
                     });
@@ -150,24 +179,5 @@ export class Auth0 extends Auth0Common {
             }
         });
     }
-
-    // public logout(): Promise<any> {
-    //     const webAuth = new WebAuthProvider(this.account);
-
-    //     return new Promise((resolve, reject) => {
-    //         try {
-    //             const activity = Application.android.foregroundActivity == null ? Application.android.startActivity : Application.android.foregroundActivity;
-    //             webAuth.logout(activity, {
-    //                 onFailure: (err: AuthenticationException) => {
-    //                     reject(err);
-    //                 },
-    //                 onSuccess: () => {
-    //                     resolve(true);
-    //                 }
-    //             });
-    //         } catch (e) {
-    //             reject(e);
-    //         }
-    //     });
-    // }
+    */
 }

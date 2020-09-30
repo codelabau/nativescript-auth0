@@ -1,3 +1,4 @@
+@NativeClass()
 export class CustomAppDelegate extends UIResponder implements UIApplicationDelegate {
     public static ObjCProtocols = [UIApplicationDelegate];
     protected static _queue: Object = {};

@@ -18,12 +18,8 @@ export class HelloWorldModel extends Observable {
             scope: 'openid offline_access'
         }).then((result) => {
             console.log('success');
-            console.log(result);
-            console.log(result.accessToken);
-            console.log(result.getAccessToken());
-            console.log(result.toJSON());
-            this.message = JSON.stringify(result);
             console.log(JSON.stringify(result));
+            this.message = JSON.stringify(result);
         }).catch((e: Error) => console.log(e, e.stack));
     }
 

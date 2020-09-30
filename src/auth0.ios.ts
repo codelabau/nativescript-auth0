@@ -31,7 +31,7 @@ export class Auth0 extends Auth0Common {
         this.authenticationApi = new Auth0Authentication(this.clientId, a0_url(this.domain));
     }
 
-    public webAuthentication(options: WebAuthOptions): Promise<Credentials> {
+    public webAuthentication(options: WebAuthOptions): Promise<any> {
         const auth = SafariWebAuth.init(this.clientId, a0_url(this.domain));
 
         if (options.audience != null) {
@@ -88,74 +88,75 @@ export class Auth0 extends Auth0Common {
         });
     }
 
-    public renewCredentials(refreshToken: string): Promise<Credentials> {
+    public logout(): Promise<any> {
         return new Promise((resolve, reject) => {
             try {
+                resolve(true);
+                /*
                 this.authenticationApi
-                    .renew(refreshToken)
-                    .start((result) => {
+                    .logout((result) => {
                         if (result.failure != null) {
                             reject(result.failure);
                         } else {
                             resolve(result.success);
                         }
                     });
+                */
             } catch (e) {
                 reject(e);
             }
         });
     }
 
-    public revokeRefreshToken(refreshToken: string): Promise<void> {
-        return new Promise((resolve, reject) => {
-            try {
-                this.authenticationApi
-                    .revoke(refreshToken)
-                    .start((result) => {
-                        if (result.failure != null) {
-                            reject(result.failure);
-                        } else {
-                            resolve();
-                        }
-                    });
-            } catch (e) {
-                reject(e);
-            }
-        });
-    }
 
-    public getUserInfo(accessToken: string): Promise<UserInfo> {
-        return new Promise((resolve, reject) => {
-            try {
-                this.authenticationApi
-                    .userInfo(accessToken)
-                    .start((result) => {
-                        if (result.failure != null) {
-                            reject(result.failure);
-                        } else {
-                            resolve(result.success);
-                        }
-                    });
-            } catch (e) {
-                reject(e);
-            }
-        });
-    }
-
-    // public logout(): Promise<any> {
+    // public renewCredentials(refreshToken: string): Promise<Credentials> {
     //     return new Promise((resolve, reject) => {
     //         try {
-    //             resolve(true);
-    //             /*
     //             this.authenticationApi
-    //                 .logout((result) => {
+    //                 .renew(refreshToken)
+    //                 .start((result) => {
     //                     if (result.failure != null) {
     //                         reject(result.failure);
     //                     } else {
     //                         resolve(result.success);
     //                     }
     //                 });
-    //             */
+    //         } catch (e) {
+    //             reject(e);
+    //         }
+    //     });
+    // }
+
+    // public revokeRefreshToken(refreshToken: string): Promise<void> {
+    //     return new Promise((resolve, reject) => {
+    //         try {
+    //             this.authenticationApi
+    //                 .revoke(refreshToken)
+    //                 .start((result) => {
+    //                     if (result.failure != null) {
+    //                         reject(result.failure);
+    //                     } else {
+    //                         resolve();
+    //                     }
+    //                 });
+    //         } catch (e) {
+    //             reject(e);
+    //         }
+    //     });
+    // }
+
+    // public getUserInfo(accessToken: string): Promise<UserInfo> {
+    //     return new Promise((resolve, reject) => {
+    //         try {
+    //             this.authenticationApi
+    //                 .userInfo(accessToken)
+    //                 .start((result) => {
+    //                     if (result.failure != null) {
+    //                         reject(result.failure);
+    //                     } else {
+    //                         resolve(result.success);
+    //                     }
+    //                 });
     //         } catch (e) {
     //             reject(e);
     //         }
