@@ -31,7 +31,7 @@ export class Auth0 extends Auth0Common {
         this.authenticationApi = new Auth0Authentication(this.clientId, a0_url(this.domain));
     }
 
-    public webAuthentication(options: WebAuthOptions): Promise<any> {
+    public login(options: WebAuthOptions): Promise<any> {
         const auth = SafariWebAuth.init(this.clientId, a0_url(this.domain));
 
         if (options.audience != null) {

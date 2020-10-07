@@ -16,6 +16,12 @@ interface WebAuthOptions {
     scope?: string;
     state?: string;
     parameters?: { [param: string]: string; };
+    customTabsOptions?: CustomTabsOptions;
+}
+
+interface CustomTabsOptions {
+    showTitle?: boolean;
+    toolbarColor?: string;
 }
 
 @NativeClass()
@@ -27,18 +33,18 @@ class WebAuthException extends Error {
 }
 export {
     WebAuthException,
-    WebAuthOptions
+    WebAuthOptions,
+    CustomTabsOptions
 };
 
 export abstract class Auth0Common {
-
     constructor(
         protected clientId: string,
         protected domain: string
     ) {}
 
-    public abstract webAuthentication(options: WebAuthOptions): Promise<any>;
-    public abstract logout(): Promise<any>;
+    public abstract login(options: WebAuthOptions): Promise<any>;
+    public abstract logout(options: WebAuthOptions): Promise<any>;
     // public abstract renewCredentials(refreshToken: string): Promise<com.auth0.android.result.Credentials>;
     // public abstract revokeRefreshToken(refreshToken: string): Promise<void>;
     // public abstract getUserInfo(accessToken: string): Promise<UserInfo>;

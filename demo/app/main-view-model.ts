@@ -14,7 +14,7 @@ export class HelloWorldModel extends Observable {
 
     onTap(args) {
         const button = args.object;
-        this.auth0.webAuthentication({
+        this.auth0.login({
             scope: 'openid offline_access'
         }).then((result) => {
             console.log('success');
