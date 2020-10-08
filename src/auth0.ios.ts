@@ -4,16 +4,16 @@ import {
     WebAuthException,
     WebAuthOptions
 } from './auth0-common';
-import { Auth0Authentication } from './ios/auth0Authentication';
-import { SafariWebAuth } from './ios/safariWebAuth';
-import { ResponseType as iOSResponseType } from './ios/responseType';
-import { a0_url } from './ios/utils';
-import { Credentials } from './common/credentials';
-import { UserInfo } from './common/userInfo';
+// import { Auth0Authentication } from './ios/auth0Authentication';
+// import { SafariWebAuth } from './ios/safariWebAuth';
+// import { ResponseType as iOSResponseType } from './ios/responseType';
+// import { a0_url } from './ios/utils';
+// import { Credentials } from './common/credentials';
+// import { UserInfo } from './common/userInfo';
 
 export {
-    Credentials,
-    UserInfo,
+    // Credentials,
+    // UserInfo,
     ResponseType,
     WebAuthException,
     WebAuthOptions
@@ -22,21 +22,22 @@ export {
 export { resumeAuth } from './ios/webAuth';
 
 export class Auth0 extends Auth0Common {
-
-    private authenticationApi: Auth0Authentication;
+    // private authenticationApi: Auth0Authentication;
 
     constructor(clientId: string, domain: string) {
         super(clientId, domain);
 
-        this.authenticationApi = new Auth0Authentication(this.clientId, a0_url(this.domain));
+        // this.authenticationApi = new Auth0Authentication(this.clientId, a0_url(this.domain));
     }
 
     public login(options: WebAuthOptions): Promise<any> {
-        const auth = SafariWebAuth.init(this.clientId, a0_url(this.domain));
+        const auth = Auth0.webAuth();
+        // const auth = SafariWebAuth.init(this.clientId, a0_url(this.domain));
 
         if (options.audience != null) {
-            auth.setAudience(options.audience);
+            auth.audience(options.audience);
         }
+        /*
         if (options.connection != null) {
             auth.setConnection(options.connection);
         }
@@ -56,12 +57,14 @@ export class Auth0 extends Auth0Common {
                     break;
             }
         }
+        */
         /**
          * Not supported by iOS at this time
          */
         /*if (options.scheme != null) {
             auth.setScheme(options.scheme);
         }*/
+        /*
         if (options.scope != null) {
             auth.setScope(options.scope);
         }
@@ -71,6 +74,7 @@ export class Auth0 extends Auth0Common {
         if (options.parameters != null) {
             auth.setParameters(options.parameters);
         }
+        */
 
         return new Promise((resolve, reject) => {
             try {
