@@ -19,7 +19,7 @@ export {
     WebAuthOptions
 };
 
-export { resumeAuth } from './ios/webAuth';
+// export { resumeAuth } from './ios/webAuth';
 
 export class Auth0 extends Auth0Common {
     // private authenticationApi: Auth0Authentication;
@@ -31,6 +31,7 @@ export class Auth0 extends Auth0Common {
     }
 
     public login(options: WebAuthOptions): Promise<any> {
+        // @ts-ignore
         const auth = Auth0.webAuth();
         // const auth = SafariWebAuth.init(this.clientId, a0_url(this.domain));
 
