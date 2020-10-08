@@ -23,7 +23,7 @@ interface CustomTabsOptions {
     showTitle?: boolean;
     toolbarColor?: string;
 }
-
+/*
 @NativeClass()
 class WebAuthException extends Error {
     constructor(message) {
@@ -31,8 +31,9 @@ class WebAuthException extends Error {
         Object.setPrototypeOf(this, new.target.prototype);
     }
 }
+*/
 export {
-    WebAuthException,
+    // WebAuthException,
     WebAuthOptions,
     CustomTabsOptions
 };

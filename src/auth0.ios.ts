@@ -1,7 +1,7 @@
 import {
     Auth0Common,
     ResponseType,
-    WebAuthException,
+    // WebAuthException,
     WebAuthOptions
 } from './auth0-common';
 // import { Auth0Authentication } from './ios/auth0Authentication';
@@ -15,7 +15,7 @@ export {
     // Credentials,
     // UserInfo,
     ResponseType,
-    WebAuthException,
+    // WebAuthException,
     WebAuthOptions
 };
 
@@ -81,7 +81,8 @@ export class Auth0 extends Auth0Common {
             try {
                 auth.start((result) => {
                     if (result.failure != null) {
-                        reject(new WebAuthException(result.failure.message));
+                        console.log(result.failure.message);
+                        // reject(new WebAuthException(result.failure.message));
                     } else {
                         const credentials = result.success;
                         resolve(credentials);

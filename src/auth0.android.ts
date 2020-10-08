@@ -1,7 +1,7 @@
 import { Application } from '@nativescript/core';
 import {
   Auth0Common,
-  WebAuthException,
+  // WebAuthException,
   WebAuthOptions
 } from './auth0-common';
 
@@ -67,9 +67,9 @@ export class Auth0 extends Auth0Common {
         webAuth.start(activity, new com.auth0.android.provider.AuthCallback({
           onFailure: (dialogOrException: android.app.Dialog | com.auth0.android.authentication.AuthenticationException) => {
             if (dialogOrException instanceof android.app.Dialog) {
-              reject(new WebAuthException(dialogOrException.toString()));
+              // reject(new WebAuthException(dialogOrException.toString()));
             } else {
-              reject(new WebAuthException(dialogOrException.getDescription()));
+              // reject(new WebAuthException(dialogOrException.getDescription()));
             }
           },
           onSuccess: (credentials: com.auth0.android.result.Credentials) => {

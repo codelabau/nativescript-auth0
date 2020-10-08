@@ -14,6 +14,7 @@ export class HelloWorldModel extends Observable {
 
     onTap(args) {
         const button = args.object;
+        // @ts-ignore
         this.auth0.login({
             scope: 'openid offline_access'
         }).then((result) => {
@@ -25,6 +26,7 @@ export class HelloWorldModel extends Observable {
 
     onLogoutTap(args) {
         const button = args.object;
+        // @ts-ignore
         this.auth0.logout().then((result) => {
             this.message = JSON.stringify(result);
             console.log(result);
