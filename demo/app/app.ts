@@ -1,18 +1,27 @@
 ﻿import { Application } from '@nativescript/core';
 
-/*
 if (Application.ios) {
-    const delegate = require('./custom-app-delegate');
-    // const Auth0 = require('nativescript-auth0');
+    @NativeClass()
+    class MyDelegate extends UIResponder implements UIApplicationDelegate {
+        public static ObjCProtocols = [UIApplicationDelegate];
 
-    const CustomAppDelegate = delegate.CustomAppDelegate;
-    Application.ios.delegate = CustomAppDelegate;
+        applicationDidFinishLaunchingWithOptions(application: UIApplication, launchOptions: NSDictionary<string, any>): boolean {
+            console.log('applicationWillFinishLaunchingWithOptions: ' + launchOptions)
+            return true;
+        }
 
-    CustomAppDelegate.apply('applicationOpenURLOptions', (event) => {
-        // @ts-ignore
-        return A0WebAuth.resumeAuth(event.args.url, event.args.options);
-    });
+        applicationDidBecomeActive(application: UIApplication): void {
+            console.log('applicationDidBecomeActive: ' + application)
+        }
+
+        applicationOpenURLOptions(app: UIApplication, url: NSURL, options: NSDictionary<string, any>): boolean {
+            console.log('applicationOpenURLOptions');
+            // @ts-ignore
+            return A0WebAuth.resumeAuthWithURLOptions(url, options);
+        }
+    }
+
+    Application.ios.delegate = MyDelegate;
 }
-*/
 
 Application.run({ moduleName: 'main-page' });

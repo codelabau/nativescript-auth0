@@ -9,6 +9,7 @@ export enum ResponseType {
 
 export interface WebAuthOptions {
     audience?: string;
+    issuer?: string;
     connection?: string;
     nonce?: string;
     responseType?: ResponseType;

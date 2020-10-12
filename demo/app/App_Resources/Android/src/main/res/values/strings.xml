@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">NativeScript Application</string>
     <string name="title_activity_kimera">NativeScript Application</string>
-    <string name="com_auth0_client_id">q5atQzi6DgmWBpHWRJbd7MBNa5eLBPRp</string>
-    <string name="com_auth0_domain">nativescript.auth0.com</string>
+    <string name="com_auth0_client_id">nSdb2Sd8uZJ7rXkldAuzjbhxsqRp7042</string>
+    <string name="com_auth0_domain">nativescript.au.auth0.com</string>
 </resources>

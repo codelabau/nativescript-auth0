@@ -39,79 +39,50 @@ export class Auth0 extends Auth0Common {
     public login(options: WebAuthOptions): Promise<any> {
         // @ts-ignore
         const auth = new A0WebAuth(this.clientId, NSURL.URLWithString(`https://${this.domain}/`));
-        // const auth = SafariWebAuth.init(this.clientId, a0_url(this.domain));
-
-        console.log('auth');
-        console.log(auth);
-        console.log(auth.scope);
-
-        console.log('NSDictionary');
-        // @ts-ignore
-        /*
-        const d = NSDictionary.alloc().initWithObjectsAndKeys(['audience', `https://${this.domain}/userinfo`]);
-
-        console.log(d);
-
-        // @ts-ignore
-        auth.addParameters(d);
-        */
 
         /*
         if (options.audience != null) {
             // @ts-ignore
-            auth.addParameters(new NSDictionary(['audience', options.audience]));
+            auth.addParameters(NSDictionary.dictionaryWithDictionary({ 'audience': options.audience }));
         }
         */
-        if (options.scope != null) {
+
+       // @ts-ignore
+    //    auth.addParameters(NSDictionary.dictionaryWithDictionary({ 'audience': `https://${this.domain}/userinfo` }));
+
+        if (options.issuer != null) {
             // @ts-ignore
-            // auth.addParameters(NSDictionary.alloc().initWithObjectsForKeys(['scope', options.scope]));
-            auth.scope = options.scope;
+            // auth.scope = options.scope;
+            auth.addParameters(NSDictionary.dictionaryWithDictionary({ 'issuer': options.issuer }));
         }
 
-        /*
-        if (options.connection != null) {
-            auth.setConnection(options.connection);
-        }
-        if (options.nonce != null) {
-            auth.setNonce(options.nonce);
-        }
-        if (options.responseType != null) {
-            switch (options.responseType) {
-                case ResponseType.CODE:
-                    auth.setResponseType([iOSResponseType.code]);
-                    break;
-                case ResponseType.TOKEN:
-                    auth.setResponseType([iOSResponseType.token]);
-                    break;
-                case ResponseType.ID_TOKEN:
-                    auth.setResponseType([iOSResponseType.idToken]);
-                    break;
-            }
-        }
-        */
-        /**
-         * Not supported by iOS at this time
-         */
-        /*if (options.scheme != null) {
-            auth.setScheme(options.scheme);
-        }*/
-        /*
         if (options.scope != null) {
-            auth.setScope(options.scope);
+            // @ts-ignore
+            // auth.scope = options.scope;
+            auth.addParameters(NSDictionary.dictionaryWithDictionary({ 'scope': options.scope }));
         }
-        if (options.state != null) {
-            auth.setState(options.state);
-        }
-        if (options.parameters != null) {
-            auth.setParameters(options.parameters);
-        }
-        */
+        // @ts-ignore
+        // auth.addParameters(NSDictionary.dictionaryWithDictionary({ 'logging': true }));
 
         return new Promise((resolve, reject) => {
             try {
-                auth.start((result) => {
-                    console.log(result);
+                auth.start((p1: NSError, p2: A0Credentials) => {
+                    debugger;
+                    if (p1) {
+                        console.log('error');
+                        console.log(p1);
+                        console.log(p1.description);
+                    }
 
+                    console.log('------------------');
+
+                    if (p2) {
+                        console.log('success');
+                    }
+
+                    resolve(true);
+
+                    /*
                     // @ts-ignore
                     if (result.failure != null) {
                         // @ts-ignore
@@ -122,6 +93,7 @@ export class Auth0 extends Auth0Common {
                         const credentials = result.success;
                         resolve(credentials);
                     }
+                    */
                 });
             } catch (e) {
                 reject(e);

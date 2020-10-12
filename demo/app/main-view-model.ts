@@ -8,7 +8,7 @@ export class HelloWorldModel extends Observable {
     constructor() {
         super();
 
-        this.auth0 = new Auth0('q5atQzi6DgmWBpHWRJbd7MBNa5eLBPRp', 'nativescript.auth0.com');
+        this.auth0 = new Auth0('nSdb2Sd8uZJ7rXkldAuzjbhxsqRp7042', 'nativescript.au.auth0.com');
         this.message = 'hello';
     }
 
@@ -16,7 +16,7 @@ export class HelloWorldModel extends Observable {
         const button = args.object;
         // @ts-ignore
         this.auth0.login({
-            scope: 'openid offline_access'
+            scope: 'openid offline_access',
         }).then((result) => {
             console.log('success');
             console.log(JSON.stringify(result));
