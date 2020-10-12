@@ -7,7 +7,7 @@ export enum ResponseType {
     ID_TOKEN = 4
 }
 
-interface WebAuthOptions {
+export interface WebAuthOptions {
     audience?: string;
     connection?: string;
     nonce?: string;
@@ -19,10 +19,11 @@ interface WebAuthOptions {
     customTabsOptions?: CustomTabsOptions;
 }
 
-interface CustomTabsOptions {
+export interface CustomTabsOptions {
     showTitle?: boolean;
     toolbarColor?: string;
 }
+
 /*
 @NativeClass()
 class WebAuthException extends Error {
@@ -32,11 +33,6 @@ class WebAuthException extends Error {
     }
 }
 */
-export {
-    // WebAuthException,
-    WebAuthOptions,
-    CustomTabsOptions
-};
 
 export abstract class Auth0Common {
     constructor(

@@ -22,22 +22,52 @@ export {
 // export { resumeAuth } from './ios/webAuth';
 
 export class Auth0 extends Auth0Common {
+    public clientId: string;
+    public domain: string;
+
     // private authenticationApi: Auth0Authentication;
 
     constructor(clientId: string, domain: string) {
         super(clientId, domain);
 
-        // this.authenticationApi = new Auth0Authentication(this.clientId, a0_url(this.domain));
+        this.clientId = clientId;
+        this.domain = domain;
+
+        // this.authenticationApi = new A0AuthenticationAPI.initWithClientIdUrl(this.clientId, this.domain);
     }
 
     public login(options: WebAuthOptions): Promise<any> {
         // @ts-ignore
-        const auth = Auth0.webAuth();
+        const auth = new A0WebAuth(this.clientId, NSURL.URLWithString(`https://${this.domain}/`));
         // const auth = SafariWebAuth.init(this.clientId, a0_url(this.domain));
 
+        console.log('auth');
+        console.log(auth);
+        console.log(auth.scope);
+
+        console.log('NSDictionary');
+        // @ts-ignore
+        /*
+        const d = NSDictionary.alloc().initWithObjectsAndKeys(['audience', `https://${this.domain}/userinfo`]);
+
+        console.log(d);
+
+        // @ts-ignore
+        auth.addParameters(d);
+        */
+
+        /*
         if (options.audience != null) {
-            auth.audience(options.audience);
+            // @ts-ignore
+            auth.addParameters(new NSDictionary(['audience', options.audience]));
         }
+        */
+        if (options.scope != null) {
+            // @ts-ignore
+            // auth.addParameters(NSDictionary.alloc().initWithObjectsForKeys(['scope', options.scope]));
+            auth.scope = options.scope;
+        }
+
         /*
         if (options.connection != null) {
             auth.setConnection(options.connection);
@@ -80,10 +110,15 @@ export class Auth0 extends Auth0Common {
         return new Promise((resolve, reject) => {
             try {
                 auth.start((result) => {
+                    console.log(result);
+
+                    // @ts-ignore
                     if (result.failure != null) {
+                        // @ts-ignore
                         console.log(result.failure.message);
                         // reject(new WebAuthException(result.failure.message));
                     } else {
+                        // @ts-ignore
                         const credentials = result.success;
                         resolve(credentials);
                     }
@@ -113,7 +148,6 @@ export class Auth0 extends Auth0Common {
             }
         });
     }
-
 
     // public renewCredentials(refreshToken: string): Promise<Credentials> {
     //     return new Promise((resolve, reject) => {
