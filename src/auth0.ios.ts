@@ -19,7 +19,19 @@ export {
     WebAuthOptions
 };
 
+function a0_url(domain: string): NSURL {
+    let urlString: string;
+    if (!domain.startsWith('https')) {
+        urlString = `https://${domain}`;
+    } else {
+        urlString = domain;
+    }
+    return new NSURL({ string: urlString });
+}
+
 // export { resumeAuth } from './ios/webAuth';
+
+declare const NSDictionary: any;
 
 export class Auth0 extends Auth0Common {
     public clientId: string;
@@ -37,50 +49,39 @@ export class Auth0 extends Auth0Common {
     }
 
     public login(options: WebAuthOptions): Promise<any> {
-        // @ts-ignore
-        const auth = new A0WebAuth(this.clientId, NSURL.URLWithString(`https://${this.domain}/`));
+        const auth = new A0WebAuth({
+            clientId: this.clientId,
+            url: a0_url(this.domain),
+        });
 
-        /*
         if (options.audience != null) {
-            // @ts-ignore
             auth.addParameters(NSDictionary.dictionaryWithDictionary({ 'audience': options.audience }));
         }
-        */
-
-       // @ts-ignore
-    //    auth.addParameters(NSDictionary.dictionaryWithDictionary({ 'audience': `https://${this.domain}/userinfo` }));
 
         if (options.issuer != null) {
-            // @ts-ignore
-            // auth.scope = options.scope;
             auth.addParameters(NSDictionary.dictionaryWithDictionary({ 'issuer': options.issuer }));
         }
 
         if (options.scope != null) {
-            // @ts-ignore
-            // auth.scope = options.scope;
             auth.addParameters(NSDictionary.dictionaryWithDictionary({ 'scope': options.scope }));
         }
-        // @ts-ignore
-        // auth.addParameters(NSDictionary.dictionaryWithDictionary({ 'logging': true }));
+
+        auth.addParameters(NSDictionary.dictionaryWithDictionary({ 'issuer': 'https://wejugo-dev.au.auth0.com//' }));
+
+        // crashes when touching A0Credentials
+        console.log('A0Credentials');
+        console.log(A0Credentials);
 
         return new Promise((resolve, reject) => {
             try {
                 auth.start((p1: NSError, p2: A0Credentials) => {
-                    debugger;
+                    // crash occurs here on successful auth
+                    // if we don't console log above
                     if (p1) {
-                        console.log('error');
-                        console.log(p1);
-                        console.log(p1.description);
+                        reject(p1);
+                    } else if (p2) {
+                        resolve(p2);
                     }
-
-                    console.log('------------------');
-
-                    if (p2) {
-                        console.log('success');
-                    }
-
-                    resolve(true);
 
                     /*
                     // @ts-ignore

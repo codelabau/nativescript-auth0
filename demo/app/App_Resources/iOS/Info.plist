@@ -52,7 +52,7 @@
 			<string>auth0</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>org.nativescript.auth0demo://nativescript.au.auth0.com/ios/org.nativescript.auth0demo/callback</string>
+				<string><string>org.nativescript.auth0demo://nativescript.au.auth0.com/ios/org.nativescript.auth0demo/callback</string></string>
 			</array>
 		</dict>
 	</array>
